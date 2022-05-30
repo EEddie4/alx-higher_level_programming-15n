@@ -1,2 +1,2 @@
-#!usr/bin/bash
-print("Python start")
+#!/bin/bash
+python $PYFILE
