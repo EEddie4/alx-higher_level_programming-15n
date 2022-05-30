@@ -1,1 +1,1 @@
-This is the introduction to Pythpn in ALX SWE
+This is the introduction to Python in ALX SWE
