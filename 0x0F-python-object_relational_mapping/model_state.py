@@ -1,26 +1,23 @@
 #!/usr/bin/python3
-""" module that contains the class definition of a State and an instance
+"""This is the State module.
+
+Contains the State class that inherits from Base = declarative_base()
 """
-
-# related third party imports
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-
 
 Base = declarative_base()
 
 
 class State(Base):
-    """ State class:
-                inherits from Base Tips
-                links to the MySQL table states
-                class attribute id that represents a column of
-                an auto-generated, unique integer, can’t be null and
-                is a primary key class attribute name that represents
-                a column of a string with maximum 128 characters
-                and can’t be null
+    """This class links to the `states` table of our database.
+
+    Attributes:
+        id (int): id of the state.
+        name (str): name of the state.
     """
+
     __tablename__ = 'states'
 
-    id = Column(Integer(), primary_key=True, unique=True, nullable=False)
+    id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
     name = Column(String(128), nullable=False)

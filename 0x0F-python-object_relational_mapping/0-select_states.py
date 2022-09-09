@@ -1,32 +1,27 @@
 #!/usr/bin/python3
-""" module that lists all states in hbtn_0e_0_usa databse """
+"""
+Script that lists all `states` from the database `hbtn_0e_0_usa`.
 
-if __name__ == '__main__':
-    # Standard Library imports
-    import sys
+Arguments:
+    mysql username (str)
+    mysql password (str)
+    database name (str)
+"""
 
-    # related third party imports
-    import MySQLdb as sql
+import sys
+import MySQLdb
 
-    user = sys.argv[1]
-    passwd = sys.argv[2]
-    database = sys.argv[3]
+if __name__ == "__main__":
+    mySQL_u = sys.argv[1]
+    mySQL_p = sys.argv[2]
+    db_name = sys.argv[3]
 
-    conn = sql.connect(
-            host='localhost',
-            port=3306,
-            user=user,
-            passwd=passwd,
-            db=database)
-
-    cur = conn.cursor()
+    # By default, it will connect to localhost:3306
+    db = MySQLdb.connect(user=mySQL_u, passwd=mySQL_p, db=db_name)
+    cur = db.cursor()
 
     cur.execute("SELECT * FROM states ORDER BY id")
-
     rows = cur.fetchall()
 
     for row in rows:
         print(row)
-
-    cur.close()
-    conn.close()

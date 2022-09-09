@@ -1,35 +1,30 @@
 #!/usr/bin/python3
-""" script that lists all cities from the database hbtn_0e_4_usa """
+"""
+Script that lists all `cities` from the database `hbtn_0e_4_usa`.
 
-if __name__ == '__main__':
-    # Standard Library imports
-    import sys
+Arguments:
+    mysql username (str)
+    mysql password (str)
+    database name (str)
+"""
 
-    # related third party imports
-    import MySQLdb as sql
+import sys
+import MySQLdb
 
-    user = sys.argv[1]
-    passwd = sys.argv[2]
-    database = sys.argv[3]
+if __name__ == "__main__":
+    mySQL_u = sys.argv[1]
+    mySQL_p = sys.argv[2]
+    db_name = sys.argv[3]
 
-    conn = sql.connect(
-            host='localhost',
-            port=3306,
-            user=user,
-            passwd=passwd,
-            db=database)
+    # By default, it will connect to localhost:3306
+    db = MySQLdb.connect(user=mySQL_u, passwd=mySQL_p, db=db_name)
+    cur = db.cursor()
 
-    cur = conn.cursor()
-
-    cur.execute("""SELECT c.id, c.name, s.name
-                FROM cities c
-                JOIN states s
-                ON c.state_id=s.id
-                ORDER BY c.id ASC""")
-
+    cur.execute("SELECT c.id, c.name, s.name \
+                 FROM cities c INNER JOIN states s \
+                 ON c.state_id = s.id \
+                 ORDER BY c.id")
     rows = cur.fetchall()
-    for row in rows:
-        print("{}".format(row))
 
-    cur.close()
-    conn.close()
+    for row in rows:
+        print(row)

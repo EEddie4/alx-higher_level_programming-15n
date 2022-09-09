@@ -1,32 +1,40 @@
 #!/usr/bin/python3
-""" script that prints the State object with the name passed
-    as argument from the database hbtn_0e_6_usa
+"""
+Script that prints the `State` object in `hbtn_0e_0_usa`
+where `name` matches the argument `state name to search`.
+
+Arguments:
+    mysql username (str)
+    mysql password (str)
+    database name (str)
+    state name to search (str)
 """
 
-if __name__ == '__main__':
-    # Standard Library imports
-    import sys
+import sys
+from sqlalchemy import (create_engine)
+from sqlalchemy.orm import Session
+from sqlalchemy.engine.url import URL
+from model_state import Base, State
 
-    # related third party imports
-    from sqlalchemy import create_engine
-    from sqlalchemy.orm import sessionmaker
 
-    # local application imports
-    from model_state import Base, State
+if __name__ == "__main__":
+    mySQL_u = sys.argv[1]
+    mySQL_p = sys.argv[2]
+    db_name = sys.argv[3]
 
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'
-                           .format(sys.argv[1], sys.argv[2],
-                                   sys.argv[3]), pool_pre_ping=True)
+    st_name = sys.argv[4]
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    url = {'drivername': 'mysql+mysqldb', 'host': 'localhost',
+           'username': mySQL_u, 'password': mySQL_p, 'database': db_name}
 
-    ui = sys.argv[4].split("'")  # ui = user input
-    ni = ui[0]  # ni = new input
-    onestate = session.query(State)\
-                      .filter(State.name == ni)\
-                      .first()
-    if onestate:
-        print("{}".format(onestate.id))
+    engine = create_engine(URL(**url), pool_pre_ping=True)
+    Base.metadata.create_all(engine)
+
+    session = Session(bind=engine)
+
+    q = session.query(State).filter(State.name == st_name).order_by(State.id)
+
+    if q.first():
+        print(q.first().id)
     else:
         print("Not found")

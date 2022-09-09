@@ -1,39 +1,35 @@
 #!/usr/bin/python3
-""" script that takes in the name of a state as an argument and lists
-    all cities of that state, using the database hbtn_0e_4_usa
+"""
+Script that lists all `cities` in the `cities` table of `hbtn_0e_4_usa`
+where the city's state matches the argument `state name`.
+
+Arguments:
+    mysql username (str)
+    mysql password (str)
+    database name (str)
+    state name (str)
 """
 
-if __name__ == '__main__':
-    # Standard Library imports
-    import sys
+import sys
+import MySQLdb
 
-    # related third party imports
-    import MySQLdb as sql
+if __name__ == "__main__":
+    mySQL_u = sys.argv[1]
+    mySQL_p = sys.argv[2]
+    db_name = sys.argv[3]
 
-    user = sys.argv[1]
-    passwd = sys.argv[2]
-    database = sys.argv[3]
-    ui = sys.argv[4]  # ui = userinput
-    newinput = ui.split("'")
+    state_name = sys.argv[4]
 
-    conn = sql.connect(
-            host='localhost',
-            port=3306,
-            user=user,
-            passwd=passwd,
-            db=database)
+    # By default, it will connect to localhost:3306
+    db = MySQLdb.connect(user=mySQL_u, passwd=mySQL_p, db=db_name)
+    cur = db.cursor()
 
-    cur = conn.cursor()
-
-    cur.execute("SELECT c.name\
-        FROM states s\
-        JOIN cities c\
-        ON s.id = c.state_id\
-        WHERE s.name = '{}' ORDER BY c.id".format(newinput[0]))
-
+    cur.execute("SELECT c.name \
+                 FROM cities c INNER JOIN states s \
+                 ON c.state_id = s.id WHERE s.name = %s\
+                 ORDER BY c.id", (state_name, ))
     rows = cur.fetchall()
 
-    print(", ".join([row[0] for row in rows]))
-
-    cur.close()
-    conn.close()
+    for i in range(len(rows)):
+        print(rows[i][0], end=", " if i + 1 < len(rows) else "")
+    print("")
