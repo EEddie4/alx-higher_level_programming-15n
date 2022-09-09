@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" script that lists all State objects from the database hbtn_0e_6_usa """
+""" script that adds the State object “Louisiana”
+    to the database hbtn_0e_6_usa
+"""
 
 if __name__ == '__main__':
     # Standard Library imports
@@ -19,5 +21,7 @@ if __name__ == '__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    for state in session.query(State).order_by(State.id):
-        print("{}: {}".format(state.id, state.name))
+    state1 = State(name="Louisiana")
+    session.add(state1)
+    session.commit()
+    print(state1.id)

@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" script that lists all State objects from the database hbtn_0e_6_usa """
+""" script that prints the State object with the name passed
+    as argument from the database hbtn_0e_6_usa
+"""
 
 if __name__ == '__main__':
     # Standard Library imports
@@ -19,5 +21,12 @@ if __name__ == '__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    for state in session.query(State).order_by(State.id):
-        print("{}: {}".format(state.id, state.name))
+    ui = sys.argv[4].split("'")  # ui = user input
+    ni = ui[0]  # ni = new input
+    onestate = session.query(State)\
+                      .filter(State.name == ni)\
+                      .first()
+    if onestate:
+        print("{}".format(onestate.id))
+    else:
+        print("Not found")

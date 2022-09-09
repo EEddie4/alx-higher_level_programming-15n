@@ -1,29 +1,38 @@
 #!/usr/bin/python3
+""" script that takes in arguments and displays all values in the
+    states table of hbtn_0e_0_usa where name matches the argument.
+    which is safe from MySQL injections
 """
-script that takes in arguments and displays all
-values in the states table of hbtn_0e_0_usa where name matches
-the argument. But this time, write one that is safe from MySQL injections!
-"""
 
+if __name__ == '__main__':
+    # Standard Library imports
+    import sys
 
-import MySQLdb
-from sys import argv
+    # related third party imports
+    import MySQLdb as sql
 
-if __name__ == "__main__":
+    user = sys.argv[1]
+    passwd = sys.argv[2]
+    database = sys.argv[3]
+    userinput = sys.argv[4]
+    newinput = userinput.split("'")
 
-    db = MySQLdb.connect(
-        host="localhost",
-        port=3306,
-        user=argv[1],
-        password=argv[2],
-        database=argv[3],
+    conn = sql.connect(
+            host='localhost',
+            port=3306,
+            user=user,
+            passwd=passwd,
+            db=database)
 
-    )
-    cursor = db.cursor()
-    sql = "SELECT * FROM states WHERE Name = %s ORDER BY id "
-    cursor.execute(sql, (argv[4], ))
-    results = cursor.fetchall()
-    for row in results:
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM states WHERE name='{}'\
+                ORDER BY id".format(newinput[0]))
+
+    rows = cur.fetchall()
+
+    for row in rows:
         print(row)
-    cursor.close()
-    db.close()
+
+    cur.close()
+    conn.close()

@@ -4,8 +4,8 @@
 
 # related third party imports
 from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-
 
 Base = declarative_base()
 
@@ -24,3 +24,4 @@ class State(Base):
 
     id = Column(Integer(), primary_key=True, unique=True, nullable=False)
     name = Column(String(128), nullable=False)
+    cities = relationship("City", cascade="all, delete", backref='state')

@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" script that lists all State objects from the database hbtn_0e_6_usa """
+""" script that lists all State objects, and corresponding
+    City objects, contained in the database hbtn_0e_101_usa
+"""
 
 if __name__ == '__main__':
     # Standard Library imports
@@ -10,7 +12,8 @@ if __name__ == '__main__':
     from sqlalchemy.orm import sessionmaker
 
     # local application imports
-    from model_state import Base, State
+    from relationship_state import Base, State
+    from relationship_city import City
 
     engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'
                            .format(sys.argv[1], sys.argv[2],
@@ -19,5 +22,10 @@ if __name__ == '__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    for state in session.query(State).order_by(State.id):
-        print("{}: {}".format(state.id, state.name))
+    states = session.query(State).order_by(State.id).all()
+    i = 1
+    for count, state in enumerate(states):
+        print("{}: {}".format(count + 1, state.name))
+        for city in state.cities:
+            print("    {}: {}".format(i, city.name))
+            i = i + 1
