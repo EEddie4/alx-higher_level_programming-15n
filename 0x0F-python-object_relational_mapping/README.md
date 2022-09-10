@@ -99,6 +99,3 @@ What you should learn from this project:
 * Write a script that lists all City objects from the database hbtn_0e_101_usa 
 
 ---
-
-## Author
-* **Santiago Agudelo | Crashed Code** - [RedLyon1200](https://github.com/RedLyon1200)
