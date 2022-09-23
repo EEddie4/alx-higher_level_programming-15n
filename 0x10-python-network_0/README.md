@@ -51,6 +51,3 @@ What you should learn from this project:
 * Technical interview preparation: 
 
 ---
-
-## Author
-* **Derrick Gee** - [kai-dg](https://github.com/kai-dg)
